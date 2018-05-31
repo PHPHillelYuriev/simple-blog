@@ -1,0 +1,11 @@
+{% form_theme form 'bootstrap_4_layout.html.twig' %}
+
+{{ form_start(form) }}
+    <div class="col-md-12">
+        {{ form_row(form.content) }}
+    </div>
+    <div class="col-md-6">
+        {{ form_row(form.author) }}
+    </div>
+    <button class="btn btn-info">{{ button_label|default('Comment') }}</button>
+{{ form_end(form) }}

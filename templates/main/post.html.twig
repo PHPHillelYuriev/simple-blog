@@ -1,0 +1,100 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
+{% endblock %}
+
+{% block body %}
+{{ parent() }}
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-md-8">
+            <div class="show-article-container p-3 mt-4">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <img class="show-article-img" src="{{ asset(post.preview) }}">
+                        <div class="show-article-title-container d-inline-block pl-3 align-middle">
+                            <span class="show-article-title ">{{ post.title|title }}</span>
+                            <br>
+                            <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/alien-profile.png') }}">{{ post.author }}</span>
+                            <span class="pl-2 article-details">{{ post.publishedAt|date("d.m.Y G:i:s") }}</span>
+                            <span class="pl-2 article-details">
+                                <span class="js-like-article-count">5<span>
+                                <a href="{{ path('togglePostHeart', {'id': post.id}) }}" class="fa fa-heart-o like-article js-like-article"></a>
+                            </span>
+                            
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="article-text">
+                            <p>{{ post.content }}</p>
+                            <p><a href="{{ path('category_show', {'id': post.category.id}) }}" >Back to catecory: {{ post.category }}</a></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <p class="share-icons mb-5"><span class="pr-1">Share:</span> <i class="pr-1 fa fa-facebook-square"></i><i class="pr-1 fa fa-twitter-square"></i><i class="pr-1 fa fa-reddit-square"></i><i class="pr-1 fa fa-share-alt-square"></i></p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        {% if post.comments is empty %}
+                            <h3><i class="pr-3 fa fa-comment"></i>No comments</h3><hr>
+                            <h3>Add new comment</h3>
+                            {{ include('main/_form.html.twig') }}
+                        {% else %}
+                            <h3><i class="pr-3 fa fa-comment"></i>{{ post.comments|length }} comments</h3><hr>
+                            <div class="row">
+                            {% for comment in post.comments %}
+                            
+                                <div class="col-sm-12">
+                                    <img class="comment-img rounded-circle" src="{{ asset('images/alien-profile.png') }}">
+                                    <div class="comment-container d-inline-block pl-3 align-top">
+                                        <span class="align-left commenter-name">{{ comment.author }}</span>
+                                        <span class="align-right comment">{{ comment.publishedDate|date("d.m.Y G:i:s") }}</span>
+                                        <br>
+                                        <p class="comment">{{ comment.content }}</p>
+                                   </div>
+                                    <div class="comment-container" >
+                                        <a href="{{ path('deleteComment', {'id': post.id, 'commentId': comment.id}) }}">
+                                            <button class="btn btn-danger">Delete</button>
+                                        </a><hr><br>
+                                    </div>
+                                </div>
+                            {% endfor%}
+                            </div>
+                            <h3>Add new comment</h3>
+                            {{ include('main/_form.html.twig') }}
+                        {% endif %}                      
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right bar ad space -->
+
+        <div class="quote-space pb-2 pt-2 px-5">
+            <h3 class="text-center pb-3">
+                <a href="{{ path('showCategoriesFromAjax') }}" class="js-showCategories">Categories:</a>
+            </h3>
+            <ul class="js-categoriesList list-group">    
+            </ul>
+        <div>
+        <!-- Вставить блок теги -->
+         {{ dump(app.user.roles) }}                            
+        {{ render(controller('App\\Controller\\MainController::tags')) }}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/articleShow.js') }}"></script>
+{% endblock %}
