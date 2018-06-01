@@ -17,7 +17,7 @@ use App\Repository\TagRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Psr\Log\LoggerInterface;
-// use App\Service\PostManager;
+use App\Service\CommentManager;
 
 class MainController extends Controller
 {
@@ -37,32 +37,21 @@ class MainController extends Controller
     public function showPostById(Post $post, Request $request, LoggerInterface $logger)
     {   
         $user = $this->getUser();
-        $comment = new Comment($post, $user);
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
+        $cm = $this->get(CommentManager::class);
+        $comment = $cm->createComment($request, $post, $user);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-
-            //add new comment to database
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($comment);
-            $em->flush();
-
+        //if comment create
+        if (!$comment) {
             //show flash message
             $message = 'You add a new comment!';
             $this->addFlash('success', $message);
-
             //create log message
             $logger->info($message);
 
-            return $this->redirectToRoute('showPostById', ['id' => $post->getId()] );
+            return $this->redirectToRoute('showPostById', ['id' => $post->getId()]);
         }
 
-        return $this->render('main/post.html.twig', [
-            'post' => $post,
-            'comment' => $comment,
-            'form' => $form->createView(),
-        ]);
+        return $this->render('main/post.html.twig', $comment);
     }
 
     /**
@@ -74,10 +63,10 @@ class MainController extends Controller
     }
 
     /**
-     * @Route("{id}/comments/{commentId}/delete", name="deleteComment")
+     * @Route("posts/{id}/comments/{commentId}/delete", name="deleteComment")
      * @ParamConverter("comment", options={"mapping": {"commentId" = "id"}})
      */
-    public function delete(Request $request, Comment $comment, Post $post, LoggerInterface $logger)
+    public function delete(Comment $comment, Post $post, LoggerInterface $logger)
     {
         //remove comment from database
         $entityManager = $this->getDoctrine()->getManager();
