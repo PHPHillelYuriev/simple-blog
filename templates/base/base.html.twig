@@ -8,6 +8,8 @@
 
         {% block stylesheets %}
             <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+            <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
+            <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
         {% endblock %}
     </head>
 
@@ -30,22 +32,33 @@
                     <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-info my-2 my-sm-0" type="submit">Search</button>
                 </form>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown" style="margin-right: 75px;">
-                        <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <img class="nav-profile-img rounded-circle" src="images/astronaut-profile.png">
-                </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Profile</a>
-                            <a class="dropdown-item" href="#">Create Post</a>
-                            <a class="dropdown-item" href="#">Logout</a>
-                        </div>
-                    </li>
-                </ul>
+
+                {% if app.user is empty %}
+                    
+                    <ul class="navbar-nav ml-auto">
+                        <a href=" {{ path('login') }}" class="btn btn-light" style="margin-right: 25px;">Sign in</a>
+                        <a href="{{ path('register') }}" class="btn btn-light">Sign up</a>
+                    <ul>
+
+                {% else %}     
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown" style="margin-right: 75px;">
+                            <a class="nav-link dropdown-toggle" href="http://example.com" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <img class="nav-profile-img rounded-circle" src="{{ asset('images/astronaut-profile.png') }}">
+                                <span class="btn btn-light">{{ app.user.username}}</span>
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <a class="dropdown-item" href="#">Profile</a>
+                                <a class="dropdown-item" href="#">Create Post</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                {% endif %}
             </div>
         </nav>
 
-        {% block body %} 
+        {% block content %} 
             {% block fleshMessage %}
                 {% for label, messages in app.flashes %}
                     {% for message in messages %}
@@ -54,12 +67,25 @@
                         </div>
                     {% endfor %}
                 {% endfor %}
+            {% endblock %}            
+            
+            <!-- Right bar ad space -->
+            {% block rightBar %}
+
+                <div class="quote-space pb-2 pt-2 px-5">
+                    {{ render(controller('App\\Controller\\CategoryController::categories')) }}
+                                                     
+                    {{ render(controller('App\\Controller\\TagController::tags')) }}
+                </div>
+            
             {% endblock %}
+
         {% endblock %}
         
-        {% block footer%}
+        {% block footer %}
             {% include 'base/partial/footer.html' %}
         {% endblock %}
+        
 
         {% block javascripts %}
             <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>

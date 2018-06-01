@@ -10,6 +10,7 @@ use App\Entity\Post;
 use App\Entity\Category;
 use App\Entity\Tag;
 use App\Entity\Comment;
+use App\Entity\User;
 use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\TagRepository;
@@ -34,8 +35,9 @@ class MainController extends Controller
      * @Route("/posts/{id}", name="showPostById", requirements={"id"="\d+"})
      */
     public function showPostById(Post $post, Request $request, LoggerInterface $logger)
-    {
-        $comment = new Comment($post);
+    {   
+        $user = $this->getUser();
+        $comment = new Comment($post, $user);
         $form = $this->createForm(CommentType::class, $comment);
         $form->handleRequest($request);
 
@@ -91,20 +93,5 @@ class MainController extends Controller
 
         return $this->redirectToRoute('showPostById', ['id' => $post->getId()] );
     }
-
-    /**
-     * @Route("/posts/tags/{tag}", name="showPostsByTag")
-     * @ParamConverter("tag", options={"mapping": {"tag" = "name"}})
-     */
-    public function showPostsByTag(Tag $tag)
-    {   
-        return $this->render('main/tag.html.twig', ['tag' => $tag ]);
-    }
-
-    public function tags(TagRepository $repository)
-    {
-        $tags = $repository->findAll();
-
-        return $this->render('main/partial/tags.html.twig', compact('tags'));       
-    }  
+  
 }

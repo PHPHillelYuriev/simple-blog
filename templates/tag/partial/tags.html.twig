@@ -1,0 +1,11 @@
+<h3 class="text-center pb-3">Tags:</h3>
+<ul class="list-group">
+    
+    {# show list tag.name  #}
+    {% for tag in tags %}
+
+        <a href="{{ path('showPostsByTag', {'tag': tag.name}) }}" class="list-group-item">{{ tag.name|title }}</a>
+
+    {% endfor%}
+
+</ul>

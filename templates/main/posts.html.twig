@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="{{ asset('css/font-awesome.css') }}">
 {% endblock %}
 
-{% block body %}
+{% block content %}
     <div class="container">
         <div class="row">
 
@@ -31,7 +31,7 @@
                         </a>
                         <hr>
                         <div>
-                            <a href="{{ path('category_show', {'id': post.category.id}) }}" class="align-right article-details btn-info">{{ post.category }}</a>
+                            {# <a href="{{ path('category_show', {'id': post.category.id}) }}" class="align-right article-details btn-info">{{ post.category }}</a> #}
                             {% for tag in post.tags %}
 
                                 <a href="{{ path('showPostsByTag', {'tag': tag.name}) }}" class="align-right article-details btn-warning">{{ tag.name }}</a>
@@ -46,21 +46,13 @@
             </div>
 
             <!-- Right bar ad space -->
-
-            <div class="quote-space pb-2 pt-2 px-5">
-                <h3 class="text-center pb-3">
-                    <a href="">Categories:</a>
-                </h3>
-                <ul class="js-categoriesList list-group">    
-                </ul>
-            <div>
-
-            <!-- Вставить блок теги -->
-                                     
-            {{ render(controller('App\\Controller\\MainController::tags')) }}
+            {% block rightBar %}
+                {{ parent() }}            
+            {% endblock %}
 
         </div>
     </div>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -46,7 +46,7 @@ class Post
     /**
      * @ORM\Column(type="datetime")
      */
-    private $puplished_at;
+    private $published_at;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -135,14 +135,14 @@ class Post
         return $this;
     }
 
-    public function getPuplishedAt(): ?\DateTimeInterface
+    public function getPublishedAt(): ?\DateTimeInterface
     {
-        return $this->puplished_at;
+        return $this->published_at;
     }
 
-    public function setPuplishedAt(\DateTimeInterface $puplished_at): self
+    public function setPublishedAt(\DateTimeInterface $published_at): self
     {
-        $this->puplished_at = $puplished_at;
+        $this->published_at = $published_at;
 
         return $this;
     }

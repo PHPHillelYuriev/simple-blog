@@ -1,0 +1,12 @@
+<h3 class="text-center pb-3">Categories:</h3>
+<ul class="list-group">
+    
+    {# show list category.name  #}
+    {% for category in categories %}
+
+        <a href="{{ path('showPostsByCategory', {'category': category.name}) }}" class="list-group-item">{{ category.name|title }}</a>
+
+    {% endfor%}
+
+</ul>
+<br>

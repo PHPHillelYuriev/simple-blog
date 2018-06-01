@@ -34,7 +34,7 @@ class Comment
     /**
      * @ORM\Column(type="datetime")
      */
-    private $publised_date;
+    private $published_date;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Post", inversedBy="comments")
@@ -42,10 +42,11 @@ class Comment
      */
     private $post;
 
-    public function __construct(Posts $post)
+    public function __construct(Post $post, string $user = null )
     {
         $this->published_date = new \DateTime() ? new \DateTime() : 'NEW';
         $this->post= $post;
+        $this->author = $user;
     }
 
     public function __toString()
@@ -82,14 +83,14 @@ class Comment
         return $this;
     }
 
-    public function getPublisedDate(): ?\DateTimeInterface
+    public function getPublishedDate(): ?\DateTimeInterface
     {
-        return $this->publised_date;
+        return $this->published_date;
     }
 
-    public function setPublisedDate(\DateTimeInterface $publised_date): self
+    public function setPublishedDate(\DateTimeInterface $publised_date): self
     {
-        $this->publised_date = $publised_date;
+        $this->published_date = $published_date;
 
         return $this;
     }
