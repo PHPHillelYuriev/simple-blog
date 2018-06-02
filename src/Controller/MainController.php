@@ -78,7 +78,7 @@ class MainController extends Controller
      * @Route("posts/{id}/comments/{commentId}/delete", name="deleteComment")
      * @ParamConverter("comment", options={"mapping": {"commentId" = "id"}})
      */
-    public function delete(Comment $comment, Post $post, LoggerInterface $logger)
+    public function deleteComment(Comment $comment, Post $post, LoggerInterface $logger)
     {
         //remove comment from database
         $entityManager = $this->getDoctrine()->getManager();
