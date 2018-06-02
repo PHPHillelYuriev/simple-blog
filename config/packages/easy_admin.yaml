@@ -1,0 +1,10 @@
+easy_admin:
+    entities:
+        Post:
+            class: App\Entity\Post
+        Category:
+            class: App\Entity\Category
+        Tag:
+            class: App\Entity\Tag
+
+    site_name: 'My adminPanel' 

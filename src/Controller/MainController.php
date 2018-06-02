@@ -24,11 +24,23 @@ class MainController extends Controller
     /**
      * @Route("/posts", name="posts")
      */
-    public function posts(CategoryRepository $categoryRepository)
+    public function posts(Request $request)
     {   
-        $categories = $categoryRepository->findAll();
+        //create pagination
+        $em = $this->getDoctrine()->getManager();
+        $dql = "SELECT a FROM App\Entity\Post a";
+        $query = $em->createQuery($dql);
 
-        return $this->render('main/posts.html.twig', ['categories' => $categories]);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            3
+        );
+        $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
+
+        return $this->render('main/posts.html.twig', ['pagination' => $pagination]);
     }
 
     /**

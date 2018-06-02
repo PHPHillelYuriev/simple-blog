@@ -9,41 +9,40 @@
 {% block content %}
     <div class="container">
         <div class="row">
-
+            
             <!-- Article List -->
 
-            <div class="col-sm-12 col-md-8">
+            <div class="col-sm-12 col-md-8">                                   
 
-                {% for category in categories %}                    
+                {% for post in pagination %}
 
-                    {% for post in category.posts %}
-
-                    <div class="article-container my-1">
-                        <a href="{{ path('showPostById', {'id': post.id}) }}">
-                            <img class="article-img" src="{{ asset(asset(post.preview)) }}">
-                            <span>{{ post.title|title }}</span>
-                            <div class="article-title d-inline-block pl-3 align-middle">
-                                <hr>
-                                <span>{{ post.description|title }}</span>
-                                <hr>
-                                <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/alien-profile.png') }}">{{ post.author }}</span>                                
-                            </div>
-                        </a>
-                        <hr>
-                        <div>
-                            {# <a href="{{ path('category_show', {'id': post.category.id}) }}" class="align-right article-details btn-info">{{ post.category }}</a> #}
-                            {% for tag in post.tags %}
-
-                                <a href="{{ path('showPostsByTag', {'tag': tag.name}) }}" class="align-right article-details btn-warning">{{ tag.name }}</a>
-
-                            {% endfor %}
-
-                            <p class="pl-5 article-details float-right">{{ post.publishedAt|date("d.m.Y G:i:s") }}</p><br>
+                <div class="article-container my-1">
+                    <a href="{{ path('showPostById', {'id': post.id}) }}">
+                        <img class="article-img" src="{{ asset(asset(post.preview)) }}">
+                        <span>{{ post.title|title }}</span>
+                        <div class="article-title d-inline-block pl-3 align-middle">
+                            <hr>
+                            <span>{{ post.description|title }}</span>
+                            <hr>
+                            <span class="align-left article-details"><img class="article-author-img rounded-circle" src="{{ asset('images/alien-profile.png') }}">{{ post.author }}</span>                                
                         </div>
+                    </a>
+                    <hr>
+                    <div>
+                        {# <a href="{{ path('category_show', {'id': post.category.id}) }}" class="align-right article-details btn-info">{{ post.category }}</a> #}
+                        {% for tag in post.tags %}
+
+                            <a href="{{ path('showPostsByTag', {'tag': tag.name}) }}" class="align-right article-details btn-warning">{{ tag.name }}</a>
+
+                        {% endfor %}
+
+                        <p class="pl-5 article-details float-right">{{ post.publishedAt|date("d.m.Y G:i:s") }}</p><br>
                     </div>
-                    {% endfor %}
+                </div>
+
                 {% endfor %}
-            </div>
+
+            </div>       
 
             <!-- Right bar ad space -->
             {% block rightBar %}
@@ -51,7 +50,12 @@
             {% endblock %}
 
         </div>
+        <div class="navigation text-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
+
+    
 
 {% endblock %}
 
