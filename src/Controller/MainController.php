@@ -18,7 +18,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Psr\Log\LoggerInterface;
 use App\Service\CommentManager;
-use App\Service\PaginationManager;
+// use App\Service\PaginationManager;
 
 class MainController extends Controller
 {
@@ -27,31 +27,31 @@ class MainController extends Controller
      */
     public function posts(Request $request)
     {   
-        //create pagination
-        // $em = $this->getDoctrine()->getManager();
-        // $dql = "SELECT a FROM App\Entity\Post a";
-        // $query = $em->createQuery($dql);
-
-
-        // $paginator = $this->get('knp_paginator');
-        // $pagination = $paginator->paginate(
-        //     $query,
-        //     $request->query->getInt('page', 1),
-        //     3
-        // );
-        // $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
-
-        // return $this->render('main/posts.html.twig', ['pagination' => $pagination]);
-
-        //create pagination
-        $paginationManager = $this->get(PaginationManager::class);
-        //create query to database
+        // create pagination
+        $em = $this->getDoctrine()->getManager();
         $dql = "SELECT a FROM App\Entity\Post a";
-        //set count items on the page
-        $countItemsOnPage = 3;
-        $pagination = $paginationManager->createPagination($request, $dql, $countItemsOnPage);
+        $query = $em->createQuery($dql);
 
-        return $this->render('main/posts.html.twig', $pagination);
+
+        $paginator = $this->get('knp_paginator');
+        $pagination = $paginator->paginate(
+            $query,
+            $request->query->getInt('page', 1),
+            3
+        );
+        $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
+
+        return $this->render('main/posts.html.twig', ['pagination' => $pagination]);
+
+        // //create pagination
+        // $paginationManager = $this->get(PaginationManager::class);
+        // //create query to database
+        // $dql = "SELECT a FROM App\Entity\Post a";
+        // //set count items on the page
+        // $countItemsOnPage = 3;
+        // $pagination = $paginationManager->createPagination($request, $dql, $countItemsOnPage);
+
+        // return $this->render('main/posts.html.twig', $pagination);
     }
 
     /**
