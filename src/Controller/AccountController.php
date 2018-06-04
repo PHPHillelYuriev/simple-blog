@@ -59,4 +59,13 @@ class AccountController extends Controller
             'error'         => $error,
         ]);
     }
+
+    /**
+     * @Route("/logout", name="logout")
+     */
+    public function logout()
+    {
+        throw new \RuntimeException();
+    }   
+
 }
