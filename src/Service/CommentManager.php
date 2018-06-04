@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,14 +23,14 @@ class CommentManager
 
     public function createComment(Request $request, $post, string $user = null)
     {
-        $comment = new Comment($post, $user);        
+        $comment = new Comment($post, $user);
         $form = $this->formFactory->create(CommentType::class, $comment);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($comment);
             $this->entityManager->flush();
-
+        
             return;
         }
 

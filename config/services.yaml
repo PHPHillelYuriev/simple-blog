@@ -29,3 +29,6 @@ services:
     App\Service\CommentManager:
       public: true
 
+    App\Service\PaginationManager:
+      public: true
+
