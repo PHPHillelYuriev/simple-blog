@@ -14,27 +14,24 @@ use App\Entity\User;
 use App\Form\CommentType;
 use App\Repository\CategoryRepository;
 use App\Repository\TagRepository;
+use App\Repository\PostRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Psr\Log\LoggerInterface;
 use App\Service\CommentManager;
-// use App\Service\PaginationManager;
+use App\Service\DeleteManager;
 
 class MainController extends Controller
 {
     /**
      * @Route("/posts", name="posts")
      */
-    public function posts(Request $request)
+    public function posts(Request $request, PostRepository $postRepository)
     {   
         // create pagination
-        $em = $this->getDoctrine()->getManager();
-        $dql = "SELECT a FROM App\Entity\Post a";
-        $query = $em->createQuery($dql);
+        $query = $postRepository->getAllPosts();
 
-
-        $paginator = $this->get('knp_paginator');
-        $pagination = $paginator->paginate(
+        $pagination = $this->get('knp_paginator')->paginate(
             $query,
             $request->query->getInt('page', 1),
             3
@@ -42,16 +39,6 @@ class MainController extends Controller
         $pagination->setTemplate('@KnpPaginator/Pagination/twitter_bootstrap_v4_pagination.html.twig');
 
         return $this->render('main/posts.html.twig', ['pagination' => $pagination]);
-
-        // //create pagination
-        // $paginationManager = $this->get(PaginationManager::class);
-        // //create query to database
-        // $dql = "SELECT a FROM App\Entity\Post a";
-        // //set count items on the page
-        // $countItemsOnPage = 3;
-        // $pagination = $paginationManager->createPagination($request, $dql, $countItemsOnPage);
-
-        // return $this->render('main/posts.html.twig', $pagination);
     }
 
     /**
@@ -92,16 +79,16 @@ class MainController extends Controller
     public function deleteComment(Comment $comment, Post $post, LoggerInterface $logger)
     {
         //remove comment from database
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($comment);
-        $entityManager->flush();
+        $result = $this->get(DeleteManager::class)->deleteItemFromDB($comment);
 
-        //show flash message
-        $message = 'You delete a comment!';
-        $this->addFlash('success', $message);
+        if ($result) {
+            //show flash message
+            $message = 'You delete a comment!';
+            $this->addFlash('success', $message);
 
-        //create log message
-        $logger->info($message);
+            //create log message
+            $logger->info($message);
+        }        
 
         return $this->redirectToRoute('showPostById', ['id' => $post->getId()] );
     }

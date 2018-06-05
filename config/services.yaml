@@ -29,6 +29,6 @@ services:
     App\Service\CommentManager:
       public: true
 
-    App\Service\PaginationManager:
+    App\Service\DeleteManager:
       public: true
 
