@@ -1,6 +1,6 @@
 {% form_theme form 'bootstrap_4_layout.html.twig' %}
 
-{{ form_start(form) }}
+{{ form_start(form, {'action': path('saveComment', {'id': post.id}) }) }}
     <div class="col-md-12">
         {{ form_row(form.content) }}
     </div>

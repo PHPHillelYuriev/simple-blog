@@ -63,9 +63,6 @@ class AccountController extends Controller
     /**
      * @Route("/logout", name="logout")
      */
-    public function logout()
-    {
-        throw new \RuntimeException();
-    }   
+    public function logout() {}   
 
 }

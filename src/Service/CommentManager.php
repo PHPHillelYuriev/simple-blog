@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use App\Entity\Comment;
+use App\Entity\Post;
 use App\Form\CommentType;
 
 class CommentManager
@@ -39,5 +40,13 @@ class CommentManager
             'comment' => $comment,
             'form' => $form->createView(),
         ];  
+    }
+
+    public function createViewFormComment(Post $post)
+    {
+        $comment = new Comment($post);
+        $form = $this->formFactory->create(CommentType::class, $comment);
+
+        return $form->createView();
     }
 }

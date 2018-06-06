@@ -29,10 +29,10 @@ class MainController extends Controller
     public function posts(Request $request, PostRepository $postRepository)
     {   
         // create pagination
-        $query = $postRepository->getAllPosts();
+        $posts = $postRepository->getAllPosts();
 
         $pagination = $this->get('knp_paginator')->paginate(
-            $query,
+            $posts,
             $request->query->getInt('page', 1),
             3
         );
@@ -44,11 +44,32 @@ class MainController extends Controller
     /**
      * @Route("/posts/{id}", name="showPostById", requirements={"id"="\d+"})
      */
-    public function showPostById(Post $post, Request $request, LoggerInterface $logger)
+    public function showPostById(Post $post)
     {   
+        $form = $this->get(CommentManager::class)->createViewFormComment($post);
+
+        return $this->render('main/post.html.twig', [
+            'post' => $post,
+            'form' => $form
+            ]
+        );
+    }
+
+    /**
+     * @Route("/posts/{id}/heart", name="togglePostHeart", requirements={"id"="\d+"}, methods={"POST"})
+     */ 
+    public function togglePostHeart()
+    {
+        return $this->json(['hearts' => rand(5, 100)]);
+    }
+
+    /**
+     * @Route("posts/{id}/comments/save", name="saveComment")
+     */
+    public function saveComment(Post $post, Request $request, LoggerInterface $logger)
+    {
         $user = $this->getUser();
-        $cm = $this->get(CommentManager::class);
-        $comment = $cm->createComment($request, $post, $user);
+        $comment = $this->get(CommentManager::class)->createComment($request, $post, $user);
 
         //if comment create
         if (!$comment) {
@@ -63,15 +84,6 @@ class MainController extends Controller
 
         return $this->render('main/post.html.twig', $comment);
     }
-
-    /**
-     * @Route("/posts/{id}/heart", name="togglePostHeart", requirements={"id"="\d+"}, methods={"POST"})
-     */ 
-    public function togglePostHeart()
-    {
-        return $this->json(['hearts' => rand(5, 100)]);
-    }
-
     /**
      * @Route("posts/{id}/comments/{commentId}/delete", name="deleteComment")
      * @ParamConverter("comment", options={"mapping": {"commentId" = "id"}})
