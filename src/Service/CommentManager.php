@@ -45,8 +45,8 @@ class CommentManager
     public function saveComment(Request $request, string $user)
     {   
         $comment = new Comment();
-        $commentContent = $request->get('comment');
-        $comment->setContent($commentContent['content']);
+        $commentFromRequest = $request->get('comment');
+        $comment->setContent($commentFromRequest['content']);
         $comment->setPost($request->get('post'));
         $comment->setAuthor($user);
         
