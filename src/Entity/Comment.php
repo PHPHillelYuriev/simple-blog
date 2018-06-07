@@ -42,11 +42,13 @@ class Comment
      */
     private $post;
 
-    public function __construct(Post $post, string $user = null )
-    {
+    public function __construct(
+        // Post $post, 
+        // string $user = null
+    ) {
         $this->published_date = new \DateTime() ? new \DateTime() : 'NEW';
-        $this->post= $post;
-        $this->author = $user;
+        // $this->post= $post;
+        // $this->author = $user;
     }
 
     public function __toString()

@@ -29,7 +29,7 @@ class MainController extends Controller
     public function posts(Request $request, PostRepository $postRepository)
     {   
         // create pagination
-        $posts = $postRepository->getAllPosts();
+        $posts = $postRepository->findAll();
 
         $pagination = $this->get('knp_paginator')->paginate(
             $posts,
@@ -46,7 +46,7 @@ class MainController extends Controller
      */
     public function showPostById(Post $post)
     {   
-        $form = $this->get(CommentManager::class)->createViewFormComment($post);
+        $form = $this->get(CommentManager::class)->createFormComment($post);
 
         return $this->render('main/post.html.twig', [
             'post' => $post,
@@ -69,7 +69,7 @@ class MainController extends Controller
     public function saveComment(Post $post, Request $request, LoggerInterface $logger)
     {
         $user = $this->getUser();
-        $comment = $this->get(CommentManager::class)->createComment($request, $post, $user);
+        $comment = $this->get(CommentManager::class)->saveComment($request, $user);
 
         //if comment create
         if (!$comment) {

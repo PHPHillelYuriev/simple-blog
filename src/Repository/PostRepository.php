@@ -19,18 +19,18 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function getAllPosts()
-    {
-        // $dql = "SELECT posts FROM App\Entity\Post posts";
-        // $query = $this->getEntityManager()->createQuery($dql);
+    // public function getAllPosts()
+    // {
+    //     $dql = "SELECT posts FROM App\Entity\Post posts";
+    //     $query = $this->getEntityManager()->createQuery($dql);
 
-        // return $query->execute();
+    //     return $query->execute();
 
-        return $this->createQueryBuilder('post')
-            ->getQuery()
-            ->getResult()
-        ;
-    }
+    //     return $this->createQueryBuilder('post')
+    //         ->getQuery()
+    //         ->getResult()
+    //     ;
+    // }
 
 
 //    /**

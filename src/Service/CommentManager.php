@@ -22,27 +22,41 @@ class CommentManager
         $this->entityManager = $entityManager;
     }
 
-    public function createComment(Request $request, $post, string $user = null)
-    {
-        $comment = new Comment($post, $user);
-        $form = $this->formFactory->create(CommentType::class, $comment);
-        $form->handleRequest($request);
+    // public function createComment(Request $request, $post, string $user = null)
+    // {
+    //     $comment = new Comment($post, $user);
+    //     $form = $this->formFactory->create(CommentType::class, $comment);
+    //     $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->entityManager->persist($comment);
-            $this->entityManager->flush();
+    //     if ($form->isSubmitted() && $form->isValid()) {
+    //         $this->entityManager->persist($comment);
+    //         $this->entityManager->flush();
         
-            return;
-        }
+    //         return;
+    //     }
 
-        return [
-            'post' => $post,
-            'comment' => $comment,
-            'form' => $form->createView(),
-        ];  
+    //     return [
+    //         'post' => $post,
+    //         'comment' => $comment,
+    //         'form' => $form->createView(),
+    //     ];  
+    // }
+
+    public function saveComment(Request $request, string $user)
+    {   
+        $comment = new Comment();
+        $commentContent = $request->get('comment');
+        $comment->setContent($commentContent['content']);
+        $comment->setPost($request->get('post'));
+        $comment->setAuthor($user);
+        
+        $this->entityManager->persist($comment);
+        $this->entityManager->flush();
+        
+        return;  
     }
 
-    public function createViewFormComment(Post $post)
+    public function createFormComment(Post $post)
     {
         $comment = new Comment($post);
         $form = $this->formFactory->create(CommentType::class, $comment);
