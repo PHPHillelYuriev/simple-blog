@@ -69,7 +69,7 @@ class MainController extends Controller
     public function saveComment(Post $post, Request $request, LoggerInterface $logger)
     {
         $user = $this->getUser();
-        $comment = $this->get(CommentManager::class)->saveComment($request, $user);
+        $comment = $this->get(CommentManager::class)->saveCommentToDb($request, $post, $user);
 
         //if comment create
         if (!$comment) {
@@ -81,8 +81,6 @@ class MainController extends Controller
 
             return $this->redirectToRoute('showPostById', ['id' => $post->getId()]);
         }
-
-        return $this->render('main/post.html.twig', $comment);
     }
     /**
      * @Route("posts/{id}/comments/{commentId}/delete", name="deleteComment")
